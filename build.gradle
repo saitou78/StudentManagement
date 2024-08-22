@@ -20,6 +20,16 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	implementation 'org.apache.commons:commons-lang3:3.14.0'
+
+	runtimeOnly 'com.mysql:mysql-connector-j'
+
+	//Mybatis
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
+
+	compileOnly group: 'io.gravitee.am.repository', name: 'gravitee-am-repository-api', version: '3.0.3'
+
 	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
