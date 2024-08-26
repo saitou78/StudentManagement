@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface StudentRepository {
-  //meinブランチで作業していたため変更差分が見れなくなっています
+  //mainブランチで作業していたため変更差分が見れなくなっています
 
   @Select("SELECT * FROM student")
   List<Student> getAllStudent();
