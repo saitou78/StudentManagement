@@ -12,5 +12,4 @@ public class StudentDetail {
 
   public Student student;
   public List<StudentCourse> studentCourse;
-
 }
