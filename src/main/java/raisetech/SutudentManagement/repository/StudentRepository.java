@@ -20,16 +20,14 @@ public interface StudentRepository {
    *
    * @return　受講生一覧（全件）
    */
-  @Select("SELECT * FROM students")
   List<Student> search();
 
   /**
    * 受講生の検索
    *
-   * @param id　受講生ID
+   * @param id 　受講生ID
    * @return　受講生
    */
-  @Select("SELECT * FROM students WHERE id = #{id}")
   Student searchStudent(String id);
 
   /**
@@ -37,32 +35,41 @@ public interface StudentRepository {
    *
    * @return　受講生コース情報（全件）
    */
-  @Select("SELECT * FROM students_courses")
-  List<StudentCourse> searchStudentsCoursesList();
+  List<StudentCourse> searchStudentCourseList();
 
   /**
    * 受講生IDに紐づく受講生コース情報を検索
    *
-   * @param studentInformationId　受講生ID
+   * @param studentInformationId 　受講生ID
    * @return　受講生IDに紐づく受講生コース情報
    */
-  @Select("SELECT * FROM students_courses WHERE student_information_id = #{studentInformationId}")
-  List<StudentCourse> searchStudentsCourses(String studentInformationId);
+  List<StudentCourse> searchStudentCourse(String studentInformationId);
 
-  @Insert("INSERT INTO students (name, frigana, nickname, email, address, age, gender, remark, is_deleted) "
-      + "VALUES (#{name}, #{frigana}, #{nickname}, #{email}, #{address}, #{age}, #{gender}, #{remark}, false)")
-  @Options(useGeneratedKeys = true, keyProperty = "id")
+  /**
+   * 受講生を新規登録 IDに関しては自動採番を行う
+   *
+   * @param student 　受講生
+   */
   void registerStudent(Student student);
 
-  @Insert("INSERT INTO students_courses(student_information_id, course_name, start_date, final_date)"
-          + "VALUES(#{studentInformationId}, #{courseName}, #{startDate}, #{finalDate})")
-  @Options(useGeneratedKeys = true, keyProperty = "id")
-  void registerStudentsCourses(StudentCourse studentCourse);
+  /**
+   * 受講生コース情報の登録 IDに関しては自動採番を行う
+   *
+   * @param studentCourse 　受講生コース情報
+   */
+  void registerStudentCourse(StudentCourse studentCourse);
 
-  @Update("UPDATE students SET name = #{name}, frigana = #{frigana}, nickname = #{nickname}, "
-      + "email = #{email}, address = #{address}, age = #{age}, gender = #{gender}, remark = #{remark}, is_deleted = #{isDeleted} WHERE id = #{id}")
+  /**
+   * 受講生を更新
+   *
+   * @param student　受講生
+   */
   void updateStudent(Student student);
 
-  @Update("UPDATE students_courses SET course_name = #{courseName} WHERE id = #{id}")
-  void updateStudentsCourses(StudentCourse studentCourse);
+  /**
+   * 受講生コース情報のコース名を更新
+   *
+   * @param studentCourse　受講生コース情報
+   */
+  void updateStudentCourse(StudentCourse studentCourse);
 }
