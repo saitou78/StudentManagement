@@ -9,23 +9,48 @@ import org.apache.ibatis.annotations.Update;
 import raisetech.SutudentManagement.data.Student;
 import raisetech.SutudentManagement.data.StudentCourse;
 
+/**
+ * 受講生テーブルと受講生コース情報テーブルと紐づくRepository
+ */
 @Mapper
 public interface StudentRepository {
 
+  /**
+   * 受講生の全権検索
+   *
+   * @return　受講生一覧（全件）
+   */
   @Select("SELECT * FROM students")
   List<Student> search();
 
+  /**
+   * 受講生の検索
+   *
+   * @param id　受講生ID
+   * @return　受講生
+   */
   @Select("SELECT * FROM students WHERE id = #{id}")
   Student searchStudent(String id);
 
+  /**
+   * 受講生コース情報の全権検索
+   *
+   * @return　受講生コース情報（全件）
+   */
   @Select("SELECT * FROM students_courses")
   List<StudentCourse> searchStudentsCoursesList();
 
+  /**
+   * 受講生IDに紐づく受講生コース情報を検索
+   *
+   * @param studentInformationId　受講生ID
+   * @return　受講生IDに紐づく受講生コース情報
+   */
   @Select("SELECT * FROM students_courses WHERE student_information_id = #{studentInformationId}")
   List<StudentCourse> searchStudentsCourses(String studentInformationId);
 
   @Insert("INSERT INTO students (name, frigana, nickname, email, address, age, gender, remark, is_deleted) "
-      + "VALUES (#{name}, #{frigana}, #{nickname}, #{email}, #{address}, #{age}, #{gender}, #{remark}, #{isDeleted})")
+      + "VALUES (#{name}, #{frigana}, #{nickname}, #{email}, #{address}, #{age}, #{gender}, #{remark}, false)")
   @Options(useGeneratedKeys = true, keyProperty = "id")
   void registerStudent(Student student);
 
