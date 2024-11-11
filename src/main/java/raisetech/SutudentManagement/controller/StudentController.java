@@ -47,14 +47,6 @@ public class StudentController {
     return service.searchStudentList();
   }
 
-  @Operation(tags = "エラー処理", summary = "エラー処理",
-      responses = {@ApiResponse(responseCode = "200", description = "エラーが発生しました")
-      })
-  @GetMapping("/studentException")
-  public List<StudentDetail> getException() throws TestException {
-    throw new TestException("エラーが発生しました");
-  }
-
   /**
    * 受講生詳細検索 IDに紐づく任意の受講生の情報を取得
    *
@@ -96,5 +88,13 @@ public class StudentController {
   public ResponseEntity<String> updateStudent(@RequestBody @Valid StudentDetail studentDetail) {
     service.updateStudent(studentDetail);
     return ResponseEntity.ok("更新処理が成功しました。");
+  }
+
+  @Operation(tags = "エラー処理", summary = "エラー処理",
+      responses = {@ApiResponse(responseCode = "200", description = "エラーが発生しました")
+      })
+  @GetMapping("/studentException")
+  public List<StudentDetail> getException() throws TestException {
+    throw new TestException("エラーが発生しました");
   }
 }

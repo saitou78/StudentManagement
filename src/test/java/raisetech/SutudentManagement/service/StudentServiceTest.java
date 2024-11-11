@@ -6,6 +6,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
@@ -53,56 +54,46 @@ class StudentServiceTest {
 
   @Test
   void idに紐づく受講生詳細情報の検索() {
-    String studentId = "test-id";
+    String id = "test-id";
     Student student = new Student();
-    List<StudentCourse> studentCourseList = new ArrayList<>();
+    student.setId(id);
+    when(repository.searchStudent(id)).thenReturn(student);
+    when(repository.searchStudentCourse(id)).thenReturn(new ArrayList<>());
 
-    when(repository.searchStudent(studentId)).thenReturn(student);
-    when(repository.searchStudentCourse(student.getId())).thenReturn(studentCourseList);
+    StudentDetail expected = new StudentDetail(student, new ArrayList<>());
 
-    StudentDetail actual = sut.searchStudent(studentId);
+    StudentDetail actual = sut.searchStudent(id);
 
-    verify(repository, times(1)).searchStudent(studentId);
-    verify(repository, times(1)).searchStudentCourse(student.getId());
+    verify(repository, times(1)).searchStudent(id);
+    verify(repository, times(1)).searchStudentCourse(id);
+    assertEquals(expected.getStudent().getId(), actual.getStudent().getId());
   }
 
   @Test
   void 正常に受講生が登録されること() {
     Student student = new Student();
-    StudentCourse course1 = new StudentCourse();
-    StudentCourse course2 = new StudentCourse();
-    List<StudentCourse> studentCourses = List.of(course1, course2);
-    StudentDetail studentDetail = new StudentDetail(student, studentCourses);
-
-    doNothing().when(repository).registerStudent(student);
-    doNothing().when(repository).registerStudentCourse(course1);
-    doNothing().when(repository).registerStudentCourse(course2);
+    StudentCourse studentCourse = new StudentCourse();
+    List<StudentCourse> studentCourseList = List.of(studentCourse);
+    StudentDetail studentDetail = new StudentDetail(student, studentCourseList);
 
     StudentDetail actual = sut.registerStudent(studentDetail);
 
     assertEquals(studentDetail, actual);
 
     verify(repository, times(1)).registerStudent(student);
-    verify(repository, times(1)).registerStudentCourse(course1);
-    verify(repository, times(1)).registerStudentCourse(course2);
+    verify(repository, times(1)).registerStudentCourse(studentCourse);
   }
 
   @Test
   void 正常に更新処理がされること() {
     Student student = new Student();
-    StudentCourse course1 = new StudentCourse();
-    StudentCourse course2 = new StudentCourse();
-    List<StudentCourse> studentCourses = List.of(course1, course2);
-    StudentDetail studentDetail = new StudentDetail(student, studentCourses);
-
-    doNothing().when(repository).updateStudent(student);
-    doNothing().when(repository).updateStudentCourse(course1);
-    doNothing().when(repository).updateStudentCourse(course2);
+    StudentCourse studentCourse = new StudentCourse();
+    List<StudentCourse> studentCourseList = List.of(studentCourse);
+    StudentDetail studentDetail = new StudentDetail(student, studentCourseList);
 
     sut.updateStudent(studentDetail);
 
     verify(repository, times(1)).updateStudent(student);
-    verify(repository, times(1)).updateStudentCourse(course1);
-    verify(repository, times(1)).updateStudentCourse(course2);
+    verify(repository, times(1)).updateStudentCourse(studentCourse);
   }
 }

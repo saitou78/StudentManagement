@@ -11,13 +11,12 @@ import lombok.Setter;
 @Setter
 public class StudentCourse {
 
-    @NotBlank
-    @Pattern(regexp = "^\\d+$")
+    @Pattern(regexp = "^\\d+$", message = "数字を入力してください")
     private String id;
 
     private String studentInformationId;
 
-    @NotBlank
+    @NotBlank(message = "コース名を入力してください")
     private String courseName;
 
     private LocalDateTime startDate;
