@@ -55,4 +55,8 @@
     UPDATE students_courses SET course_name = #{courseName} WHERE id = #{id}
   </update>
 
+  <select id="searchStudentCourseTest" resultType="raisetech.SutudentManagement.data.StudentCourse">
+    SELECT * FROM students_courses WHERE id = #{id}
+  </select>
+
 </mapper>
