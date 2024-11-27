@@ -16,7 +16,7 @@ public interface StudentRepository {
    *
    * @return　受講生一覧（全件）
    */
-  List<Student> search();
+  List<Student> searchStudentList();
 
   /**
    * 受講生の検索

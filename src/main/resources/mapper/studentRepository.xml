@@ -3,7 +3,7 @@
 <mapper namespace="raisetech.SutudentManagement.repository.StudentRepository">
 
   <!-- 受講生の全権検索　-->
-  <select id="search" resultType="raisetech.SutudentManagement.data.Student">
+  <select id="searchStudentList" resultType="raisetech.SutudentManagement.data.Student">
     SELECT * FROM students
   </select>
 
