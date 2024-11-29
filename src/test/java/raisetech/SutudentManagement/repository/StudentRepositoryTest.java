@@ -17,10 +17,11 @@ class StudentRepositoryTest {
   private StudentRepository sut;
 
   @Test
-  void 受講生の全権検索が行えること() {
+  void 受講生の全件検索が行えること() {
     List<Student> actual = sut.searchStudentList();
     assertThat(actual.size()).isEqualTo(5);
     assertThat(actual.getFirst().getEmail()).isEqualTo("saitou@mail");
+    assertThat(actual.getFirst().getName()).isEqualTo("斎藤りこ");
   }
 
   @Test
@@ -36,10 +37,11 @@ class StudentRepositoryTest {
   }
 
   @Test
-  void 受講生コース情報の全権検索が行えること() {
+  void 受講生コース情報の全件検索が行えること() {
     List<StudentCourse> actual = sut.searchStudentCourseList();
     assertThat(actual.size()).isEqualTo(6);
     assertThat(actual.getLast().getStudentInformationId()).isEqualTo("5");
+    assertThat(actual.getFirst().getCourseName()).isEqualTo("プログラミング基礎");
   }
 
   @Test

@@ -1,6 +1,6 @@
 INSERT INTO students (name, frigana, nickname, email, address, age, gender, remark, is_deleted)
 VALUES
-('斎藤リコ', 'サイトウリコ', NULL, 'saitou@mail', '東京', 23, '女', NULL, 0),
+('斎藤りこ', 'サイトウリコ', NULL, 'saitou@mail', '東京', 23, '女', NULL, 0),
 ('鈴木花子', 'スズキハナコ', NULL, 'hanako@mail', '東京', 35, '女', NULL, 0),
 ('山田勇人', 'ヤマダハヤト', NULL, 'hayato@mail', '千葉', 20, '男', NULL, 0),
 ('榎並勇人', 'エナミハヤト', NULL, 'enami@mail', '千葉', 20, '男', NULL, 0),
