@@ -1,11 +1,7 @@
 package raisetech.SutudentManagement.repository;
 
 import java.util.List;
-import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
 import raisetech.SutudentManagement.data.Student;
 import raisetech.SutudentManagement.data.StudentCourse;
 
@@ -20,7 +16,7 @@ public interface StudentRepository {
    *
    * @return　受講生一覧（全件）
    */
-  List<Student> search();
+  List<Student> searchStudentList();
 
   /**
    * 受講生の検索
@@ -72,4 +68,6 @@ public interface StudentRepository {
    * @param studentCourse　受講生コース情報
    */
   void updateStudentCourse(StudentCourse studentCourse);
+
+  StudentCourse searchStudentCourseTest(String id);
 }
