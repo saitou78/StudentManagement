@@ -3,7 +3,7 @@
 <mapper namespace="raisetech.SutudentManagement.repository.StudentRepository">
 
   <!-- 受講生の全権検索　-->
-  <select id="search" resultType="raisetech.SutudentManagement.data.Student">
+  <select id="searchStudentList" resultType="raisetech.SutudentManagement.data.Student">
     SELECT * FROM students
   </select>
 
@@ -54,5 +54,9 @@
   <update id="updateStudentCourse" parameterType="raisetech.SutudentManagement.data.StudentCourse">
     UPDATE students_courses SET course_name = #{courseName} WHERE id = #{id}
   </update>
+
+  <select id="searchStudentCourseTest" resultType="raisetech.SutudentManagement.data.StudentCourse">
+    SELECT * FROM students_courses WHERE id = #{id}
+  </select>
 
 </mapper>
