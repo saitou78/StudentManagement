@@ -19,7 +19,7 @@
 
   <!-- 受講生IDに紐づく受講生コース情報を検索 -->
   <select id="searchStudentCourse" resultType="raisetech.SutudentManagement.data.StudentCourse" parameterType="string">
-    SELECT * FROM students_courses WHERE student_information_id = #{studentInformationId}
+    SELECT * FROM students_courses WHERE student_id = #{studentId}
   </select>
 
   <!-- 受講生を新規登録 IDに関しては自動採番を行う -->
@@ -30,8 +30,8 @@
 
   <!-- 受講生コース情報の登録 IDに関しては自動採番を行う -->
   <insert id="registerStudentCourse" parameterType="raisetech.SutudentManagement.data.StudentCourse" useGeneratedKeys="true" keyProperty="id">
-    INSERT INTO students_courses(student_information_id, course_name, start_date, final_date)
-    VALUES(#{studentInformationId}, #{courseName}, #{startDate}, #{finalDate})
+    INSERT INTO students_courses(student_id, course_name, start_date, final_date)
+    VALUES(#{studentId}, #{courseName}, #{startDate}, #{finalDate})
   </insert>
 
   <!-- 受講生の更新 -->

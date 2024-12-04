@@ -80,7 +80,7 @@ public class StudentService {
   private static void initStudentsCourses(StudentCourse studentCourse, Student student) {
     LocalDateTime now = LocalDateTime.now();
 
-    studentCourse.setStudentInformationId(student.getId());
+    studentCourse.setStudentId(student.getId());
     studentCourse.setStartDate(now);
     studentCourse.setFinalDate(now.plusYears(1));
   }

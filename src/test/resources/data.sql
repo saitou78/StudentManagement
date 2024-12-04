@@ -6,7 +6,7 @@ VALUES
 ('榎並勇人', 'エナミハヤト', NULL, 'enami@mail', '千葉', 20, '男', NULL, 0),
 ('榎並浩二', 'エナミコウジ', NULL, 'kouji@mail', '千葉', 20, '男', 'カレー好き', 0);
 
-INSERT INTO students_courses (student_information_id, course_name, start_date, final_date)
+INSERT INTO students_courses (student_id, course_name, start_date, final_date)
 VALUES
 (1, 'プログラミング基礎', '2024-01-01 09:00:00', '2024-12-31 18:00:00'),
 (2, 'データベース設計', '2023-04-01 09:00:00', '2024-03-31 18:00:00'),

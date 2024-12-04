@@ -36,10 +36,10 @@ public interface StudentRepository {
   /**
    * 受講生IDに紐づく受講生コース情報を検索
    *
-   * @param studentInformationId 　受講生ID
+   * @param studentId 　受講生ID
    * @return　受講生IDに紐づく受講生コース情報
    */
-  List<StudentCourse> searchStudentCourse(String studentInformationId);
+  List<StudentCourse> searchStudentCourse(String studentId);
 
   /**
    * 受講生を新規登録 IDに関しては自動採番を行う

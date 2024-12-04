@@ -14,7 +14,7 @@ public class StudentCourse {
     @Pattern(regexp = "^\\d+$", message = "数字を入力してください")
     private String id;
 
-    private String studentInformationId;
+    private String studentId;
 
     @NotBlank(message = "コース名を入力してください")
     private String courseName;

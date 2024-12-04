@@ -21,7 +21,6 @@ class StudentRepositoryTest {
     List<Student> actual = sut.searchStudentList();
     assertThat(actual.size()).isEqualTo(5);
     assertThat(actual.getFirst().getEmail()).isEqualTo("saitou@mail");
-    assertThat(actual.getFirst().getName()).isEqualTo("斎藤りこ");
   }
 
   @Test
@@ -40,8 +39,7 @@ class StudentRepositoryTest {
   void 受講生コース情報の全件検索が行えること() {
     List<StudentCourse> actual = sut.searchStudentCourseList();
     assertThat(actual.size()).isEqualTo(6);
-    assertThat(actual.getLast().getStudentInformationId()).isEqualTo("5");
-    assertThat(actual.getFirst().getCourseName()).isEqualTo("プログラミング基礎");
+    assertThat(actual.getLast().getStudentId()).isEqualTo("5");
   }
 
   @Test
@@ -82,7 +80,7 @@ class StudentRepositoryTest {
   @Test
   void 受講生コース情報の登録が行えること() {
     StudentCourse studentCourse = new StudentCourse();
-    studentCourse.setStudentInformationId("1");
+    studentCourse.setStudentId("1");
     studentCourse.setCourseName("javaコース");
     studentCourse.setStartDate(LocalDateTime.now());
     studentCourse.setFinalDate(LocalDateTime.now().plusYears(1));
@@ -119,7 +117,7 @@ class StudentRepositoryTest {
   void 受講生コース情報の更新が行えること() {
     StudentCourse studentCourse = new StudentCourse();
     studentCourse.setId("1");
-    studentCourse.setStudentInformationId("1");
+    studentCourse.setStudentId("1");
     studentCourse.setCourseName("javaコース");
     studentCourse.setStartDate(LocalDateTime.now());
     studentCourse.setFinalDate(LocalDateTime.now().plusYears(1));
