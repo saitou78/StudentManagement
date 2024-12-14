@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import raisetech.SutudentManagement.controller.converter.StudentConverter;
+import raisetech.SutudentManagement.data.CourseApplication;
 import raisetech.SutudentManagement.data.Student;
 import raisetech.SutudentManagement.data.StudentCourse;
+import raisetech.SutudentManagement.domain.StudentCourseStatus;
 import raisetech.SutudentManagement.domain.StudentDetail;
 import raisetech.SutudentManagement.repository.StudentRepository;
 
@@ -53,6 +55,33 @@ public class StudentService {
   }
 
   /**
+   * 申し込み状況詳細の全権検索
+   * 条件指定なし
+   *
+   * @return 申し込み状況一覧
+   */
+  public List<StudentCourseStatus> searchStudentCourseStatusList() {
+    List<Student> studentList = repository.searchStudentList();
+    List<StudentCourse> studentCourseList = repository.searchStudentCourseList();
+    List<CourseApplication> courseApplicationList = repository.searchCourseApplicationList();
+    return converter.convertStudentCourseStatusList(studentList, studentCourseList, courseApplicationList);
+  }
+
+  /**
+   * 申し込み状況詳細の検索
+   *
+   * @param id　受講生ID
+   * @return 申し込み状況
+   */
+  public List<StudentCourseStatus> searchStudentCourseStatus(String id) {
+    Student student = repository.searchStudent(id);
+    List<Student> studentList = List.of(student);
+    List<StudentCourse> studentCourseList = repository.searchStudentCourseList();
+    List<CourseApplication> courseApplicationList = repository.searchCourseApplicationList();
+    return converter.convertStudentCourseStatusList(studentList, studentCourseList, courseApplicationList);
+  }
+
+  /**
    * 受講生詳細の登録
    * 受講生と受講生コース情報を個別に登録し、受講生コース情報には受講生情報を紐づける値とコース開始日、コース終了日を設定
    *
@@ -64,11 +93,36 @@ public class StudentService {
     Student student = studentDetail.getStudent();
 
     repository.registerStudent(student);
-    studentDetail.getStudentCourseList().forEach(studentCourse -> {
+    for (StudentCourse studentCourse : studentDetail.getStudentCourseList()) {
       initStudentsCourses(studentCourse, student);
       repository.registerStudentCourse(studentCourse);
-    });
+    }
     return studentDetail;
+  }
+
+  /**
+   * 申し込み状況詳細登録
+   *　受講生、受講生コース情報、申し込み状況を個別に登録し、受講生コース情報には受講生情報を紐づける値とコース開始日、コース終了日を設定
+   * 申し込み状況には受講生コース情報を紐づける値を設定
+   *
+   * @param studentCourseStatus　申し込み状況詳細
+   * @return　登録情報を付与した受講生申し込み
+   */
+  @Transactional
+  public StudentCourseStatus registerStudentCourseStatus(StudentCourseStatus studentCourseStatus) {
+    Student student = studentCourseStatus.getStudent();
+
+    repository.registerStudent(student);
+    for (StudentCourse studentCourse : studentCourseStatus.getStudentCourseList()) {
+      initStudentsCourses(studentCourse, student);
+      repository.registerStudentCourse(studentCourse);
+
+      for (CourseApplication courseApplication : studentCourseStatus.getCourseApplicationList()) {
+        initCourseApplication(courseApplication, studentCourse);
+        repository.registerCourseApplication(courseApplication);
+      }
+    }
+    return studentCourseStatus;
   }
 
   /**
@@ -86,6 +140,17 @@ public class StudentService {
   }
 
   /**
+   * 申し込み状況を登録する際の初期情報を設定
+   *
+   * @param courseApplication　申し込み状況
+   * @param studentCourse　受講生コース情報
+   */
+  private static void initCourseApplication(CourseApplication courseApplication, StudentCourse studentCourse) {
+    courseApplication.setCourseId(studentCourse.getId());
+    courseApplication.setStudentId(studentCourse.getStudentId());
+  }
+
+  /**
    * 受講生詳細の更新
    * 受講生と受講生コース情報をそれぞれ更新
    *
@@ -94,7 +159,25 @@ public class StudentService {
   @Transactional
   public void updateStudent(StudentDetail studentDetail) {
     repository.updateStudent(studentDetail.getStudent());
-    studentDetail.getStudentCourseList()
-        .forEach(studentCourse -> repository.updateStudentCourse(studentCourse));
+    for (StudentCourse studentCourse : studentDetail.getStudentCourseList()) {
+      repository.updateStudentCourse(studentCourse);
+    }
+  }
+
+  /**
+   * 申し込み状況詳細の更新
+   * 受講生、受講生コース情報、申し込み状況をそれぞれ更新
+   *
+   * @param studentCourseStatus　申し込み状況詳細
+   */
+  @Transactional
+  public void updateStudentCourseStatus(StudentCourseStatus studentCourseStatus) {
+    repository.updateStudent(studentCourseStatus.getStudent());
+    for (StudentCourse studentCourse : studentCourseStatus.getStudentCourseList()) {
+      repository.updateStudentCourse(studentCourse);
+      for (CourseApplication courseApplication : studentCourseStatus.getCourseApplicationList()) {
+        repository.updateCourseApplication(courseApplication);
+      }
+    }
   }
 }

@@ -7,18 +7,16 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import raisetech.SutudentManagement.TestException;
+import raisetech.SutudentManagement.domain.StudentCourseStatus;
 import raisetech.SutudentManagement.domain.StudentDetail;
 import raisetech.SutudentManagement.service.StudentService;
 
@@ -60,12 +58,35 @@ public class StudentController {
   }
 
   /**
+   * 申し込み状況詳細の全権検索検索
+   *
+   * @return 申し込み状況
+   */
+  @Operation(tags = "検索", summary = "申し込み状況詳細", description = "申し込み状況詳細の一覧検索")
+  @GetMapping("/studentCourseStatusList")
+  public List<StudentCourseStatus> getStudentCourseStatusList() {
+    return service.searchStudentCourseStatusList();
+  }
+
+  /**
+   * 申し込み状況詳細の検索　IDに紐づく任意の受講生の情報を取得
+   *
+   * @param id　受講生ID
+   * @return　申し込み状況詳細
+   */
+  @Operation(tags = "検索", summary = "申し込み状況詳細", description = "受講生IDに紐づく受講生コース情報、申し込み状況の検索")
+  @GetMapping("/studentCourseStatus/{id}")
+  public List<StudentCourseStatus> getStudentCourseStatuses (@PathVariable @NotBlank @Pattern(regexp = "^\\d+$") String id) {
+    return service.searchStudentCourseStatus(id);
+  }
+
+  /**
    * 受講生詳細の登録
    *
    * @param studentDetail 　受講生詳細
    * @return　実行結果
    */
-  @Operation(tags = "登録", summary = "受講生登録", description = "受講生の登録",
+  @Operation(tags = "登録", summary = "受講生詳細登録", description = "受講生の登録",
       responses = {@ApiResponse(responseCode = "200", description = "受講生の詳細を一覧で出す")
       })
   @PostMapping("/registerStudent")
@@ -73,6 +94,22 @@ public class StudentController {
       @RequestBody @Valid StudentDetail studentDetail) {
     StudentDetail responseStudentDetail = service.registerStudent(studentDetail);
     return ResponseEntity.ok(responseStudentDetail);
+  }
+
+  /**
+   * 申し込み状況詳細の登録
+   *
+   * @param studentCourseStatus　申し込み状況詳細
+   * @return　実行結果
+   */
+  @Operation(tags = "登録", summary = "申し込み状況詳細登録", description = "受講生の登録",
+      responses = {@ApiResponse(responseCode = "200", description = "申し込み状況の詳細を一覧で出す")
+      })
+  @PostMapping("/registerStudentCourseStatus")
+  public ResponseEntity<StudentCourseStatus> registerStudentCourseStatus(
+      @RequestBody @Valid StudentCourseStatus studentCourseStatus) {
+    StudentCourseStatus responseStudentCourseStatus = service.registerStudentCourseStatus(studentCourseStatus);
+    return ResponseEntity.ok(responseStudentCourseStatus);
   }
 
   /**
@@ -88,6 +125,21 @@ public class StudentController {
   public ResponseEntity<String> updateStudent(@RequestBody @Valid StudentDetail studentDetail) {
     service.updateStudent(studentDetail);
     return ResponseEntity.ok("更新処理が成功しました。");
+  }
+
+  /**
+   * 申し込み状況詳細の更新
+   *
+   * @param studentCourseStatus　申し込み状況詳細
+   * @return　実行結果
+   */
+  @Operation(tags = "更新", summary = "申し込み状況詳細の更新", description = "キャンセルフラグの更新もできる",
+      responses = {@ApiResponse(responseCode = "200", description = "更新処理が成功しました。")
+      })
+  @PutMapping("/updateStudentCourseStatus")
+  public ResponseEntity<String> updateStudentCourseStatus(@RequestBody @Valid StudentCourseStatus studentCourseStatus) {
+    service.updateStudentCourseStatus(studentCourseStatus);
+    return ResponseEntity.ok("更新処理が成功しました");
   }
 
   @Operation(tags = "エラー処理", summary = "エラー処理",

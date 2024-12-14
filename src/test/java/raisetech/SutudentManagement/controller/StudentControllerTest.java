@@ -1,8 +1,6 @@
 package raisetech.SutudentManagement.controller;
 
-import static java.lang.reflect.Array.get;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -15,9 +13,7 @@ import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import java.util.List;
 import java.util.Set;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -26,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import raisetech.SutudentManagement.data.Student;
 import raisetech.SutudentManagement.data.StudentCourse;
+import raisetech.SutudentManagement.domain.StudentCourseStatus;
 import raisetech.SutudentManagement.domain.StudentDetail;
 import raisetech.SutudentManagement.service.StudentService;
 
@@ -41,7 +38,7 @@ class StudentControllerTest {
   private Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
   @Test
-  void 受講生詳細の一覧検索が実行できてからのリストが返ってくること() throws Exception {
+  void 受講生詳細の一覧検索が実行できて空のリストが返ってくること() throws Exception {
     when(service.searchStudentList()).thenReturn(List.of((new StudentDetail())));
 
     mockMvc.perform(MockMvcRequestBuilders.get("/studentList"))
@@ -58,6 +55,26 @@ class StudentControllerTest {
         .andExpect(status().isOk());
 
     verify(service, times(1)).searchStudent(id);
+  }
+
+  @Test
+  void 申し込み状況詳細の全権検索が実行できて空のリストが返ってくること() throws Exception {
+    when(service.searchStudentCourseStatusList()).thenReturn(List.of((new StudentCourseStatus())));
+
+    mockMvc.perform(MockMvcRequestBuilders.get("/studentCourseStatusList"))
+        .andExpect(status().isOk())
+        .andExpect(content().json("[{\"student\":null,\"studentCourseList\":null,\"courseApplicationList\":null}]"));
+
+    verify(service, times(1)).searchStudentCourseStatusList();
+  }
+
+  @Test
+  void 申し込み状況の検索が実行できて空で返ってくること() throws Exception {
+    String id = "999";
+    mockMvc.perform(MockMvcRequestBuilders.get("/studentCourseStatus/{id}", id))
+        .andExpect(status().isOk());
+
+    verify(service, times(1)).searchStudentCourseStatus(id);
   }
 
   @Test
@@ -86,6 +103,39 @@ class StudentControllerTest {
         .andExpect(status().isOk());
 
     verify(service, times(1)).registerStudent(any());
+  }
+
+  @Test
+  void 申し込み状況の登録が実行できて空で返ってくること() throws Exception {
+    mockMvc.perform(MockMvcRequestBuilders.post("/registerStudentCourseStatus").contentType(MediaType.APPLICATION_JSON).content(
+            """
+                {
+                         "student": {\s
+                             "name" : "榎並浩二",\s
+                             "frigana" : "エナミコウジ",\s
+                             "nickname" : "こうじ",\s
+                             "email" : "kouji@mail",\s
+                             "address" : "千葉",\s
+                             "age" : 20,\s
+                             "gender" : "男",\s
+                             "remark" : ""
+                         },
+                         "studentCourseList" : [
+                             {
+                                 "courseName" : "javaコース"
+                             }
+                         ],
+                         "courseApplicationList": [
+                                     {
+                                         "status": "仮申し込み"
+                                     }
+                             ]
+                     }
+                """
+        ))
+        .andExpect(status().isOk());
+
+    verify(service, times(1)).registerStudentCourseStatus(any());
   }
 
   @Test
@@ -119,6 +169,47 @@ class StudentControllerTest {
         .andExpect(status().isOk());
 
     verify(service, times(1)).updateStudent(any());
+  }
+
+  @Test
+  void  申し込み状況の更新ができてからで帰ってくること() throws Exception {
+    mockMvc.perform(MockMvcRequestBuilders.put("/updateStudentCourseStatus").contentType(MediaType.APPLICATION_JSON).content(
+            """
+                {
+                                   "student": {
+                                       "id": "1",
+                                       "name": "榎並浩二",
+                                       "frigana": "エナミコウジ",
+                                       "nickname": "こうじ",
+                                       "email": "kouji@mail",
+                                       "address": "千葉",
+                                       "age": 20,
+                                       "gender": "男",
+                                       "remark": ""
+                                   },
+                                   "studentCourseList": [
+                                       {
+                                           "id": "1",
+                                           "studentInformationId": "1",
+                                           "courseName": "javaコース",
+                                           "startDate": "2024-04-27T17:50:43.322143",
+                                           "finalDate": "2025-04-27T17:50:43.322143"
+                                       }
+                                   ],
+                                   "courseApplicationList": [
+                                       {
+                                            "id": "1",
+                                            "courseId": "1",
+                                            "studentId": "1",
+                                            "status": "仮申し込み"
+                                       }
+                                   ]
+                               }
+                """
+        ))
+        .andExpect(status().isOk());
+
+    verify(service, times(1)).updateStudentCourseStatus(any());
   }
 
   @Test
