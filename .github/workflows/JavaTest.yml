@@ -61,7 +61,7 @@ jobs:
             Description = StudentManagement App
   
             [Service]
-            ExecStart = java -jar \${DEST_PATH}
+            ExecStart = java -jar ${DEST_PATH}
             EnvironmentFile = /etc/sysconfig/StudentManagement
             Restart = no
             Type = simple
